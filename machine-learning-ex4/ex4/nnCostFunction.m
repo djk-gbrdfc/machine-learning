@@ -84,9 +84,10 @@ theta2 = [zeros(size(Theta2, 1), 1) Theta2(:, 2:end)];
 d3 = a3 - yNum;                                                    % 5000 * 10   输出层的误差计算
 d2 = (d3 * Theta2(:, 2:end)).*sigmoidGradient(z1 * Theta1');       % 5000 * 25   隐藏层的误差计算
 
-D2 = d3' * z2;                                          %计算的是Theta2的误差矩阵
+D2 = d3' * z2;                                          %计算的是Theta2的误差矩阵（z2就是在a2矩阵第一列插入全为一的列向量，
+                                                        %与误差矩阵公式Δ(i) = a(i) * δ(i+1)一致，公式中的a(i)是添加全为1的列向量之后的矩阵）
 regularization2 = lambda / m * theta2;
-D1 = d2' * z1;                                          %计算的是Theta1的误差矩阵
+D1 = d2' * z1;                                          %计算的是Theta1的误差矩阵，z1与上方z2同理
 regularization1 = lambda / m * theta1;
 Theta1_grad = D1 / m + regularization1;
 Theta2_grad = D2 / m + regularization2;
