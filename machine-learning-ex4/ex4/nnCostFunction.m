@@ -79,14 +79,14 @@ J = J + costregularization;
 %反向传播
 theta1 = [zeros(size(Theta1, 1), 1) Theta1(:, 2:end)];
 theta2 = [zeros(size(Theta2, 1), 1) Theta2(:, 2:end)];
-%输出层与隐藏层的误差计算公式不同。输出层误差为（预测值-标签），
+%输出层与隐藏层的误差计算公式不同。输出层误差为（预测值-标签）
 %隐藏层误差为上一层误差 * 与下一层权重 .* sigmoid的偏导数（sigmoidGradient中的值应为未进行sigmoid时的值）
-d3 = a3 - yNum;                                                    % 5000 * 10   输出层的误差
-d2 = (d3 * Theta2(:, 2:end)).*sigmoidGradient(z1 * Theta1');       % 5000 * 25   隐藏层的误差
+d3 = a3 - yNum;                                                    % 5000 * 10   输出层的误差计算
+d2 = (d3 * Theta2(:, 2:end)).*sigmoidGradient(z1 * Theta1');       % 5000 * 25   隐藏层的误差计算
 
-D2 = d3' * z2;                                          %计算的是Theta2的梯度下降的反馈误差
+D2 = d3' * z2;                                          %计算的是Theta2的误差矩阵
 regularization2 = lambda / m * theta2;
-D1 = d2' * z1;                                          %计算的是Theta1的梯度下降的反馈误差
+D1 = d2' * z1;                                          %计算的是Theta1的误差矩阵
 regularization1 = lambda / m * theta1;
 Theta1_grad = D1 / m + regularization1;
 Theta2_grad = D2 / m + regularization2;
