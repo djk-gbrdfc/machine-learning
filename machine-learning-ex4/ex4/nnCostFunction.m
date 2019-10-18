@@ -64,29 +64,29 @@ Theta2_grad = zeros(size(Theta2));
 
 yNum = zeros(m, num_labels);        % 5000 * 10
 for i = 1:m
-    yNum(i, y(i)) = 1;              %½¨Á¢Ò»¸öÀàËÆone-hotµÄ±í£¬ÔÚÊı×ÖÕæÊµÖµ´¦±ê1£¬ÆäËü±ê0
+    yNum(i, y(i)) = 1;              %å»ºç«‹ä¸€ä¸ªç±»ä¼¼one-hotçš„è¡¨ï¼Œåœ¨æ•°å­—çœŸå®å€¼å¤„æ ‡1ï¼Œå…¶å®ƒæ ‡0
 end
 
-a1 = [ones(m, 1) X];
+z1 = [ones(m, 1) X];
 
-z1 = sigmoid(a1 * Theta1');                             % 5000 * 25
-a2 = [ones(m, 1) z1];                                   % 5000 * 26
-z2 = sigmoid(a2 * Theta2');                             % 5000 * 10
-J = sum(diag(-yNum' * log(z2) - (1.-yNum)' * log(1.-z2))) / m;
+a2 = sigmoid(z1 * Theta1');                             % 5000 * 25
+z2 = [ones(m, 1) a2];                                   % 5000 * 26
+a3 = sigmoid(z2 * Theta2');                             % 5000 * 10
+J = sum(diag(-yNum' * log(a3) - (1.-yNum)' * log(1.-a3))) / m;
 costregularization =  lambda / (2 * m) * (sum(sum(Theta1(:, 2:end).^2)) + sum(sum(Theta2(:, 2:end).^2)));
 J = J + costregularization;
-%diagº¯ÊıµÄ×÷ÓÃÊÇÈ¡¾ØÕó¶Ô½ÇÏßµÄÖµÏà¼Ó£¬ÒòÎª¶à·ÖÀàÖĞ¾ØÕóÏà³Ë»á³öÏÖ¶àÓàµÄÖµ£¬Ê¹ÓÃdiagº¯Êı¿ÉÒÔÈ¥³ıÕâĞ©Öµ
-%·´Ïò´«²¥
+%diagå‡½æ•°çš„ä½œç”¨æ˜¯ä»¥å‘é‡çš„å½¢å¼è¿”å›ä¸€ä¸ªçŸ©é˜µä¸Šå¯¹è§’çº¿å…ƒç´ ã€‚ ï¼Œå› ä¸ºå¤šåˆ†ç±»ä¸­çŸ©é˜µç›¸ä¹˜ä¼šå‡ºç°å¤šä½™çš„å€¼ï¼Œä½¿ç”¨diagå‡½æ•°å¯ä»¥å»é™¤è¿™äº›å€¼
+%åå‘ä¼ æ’­
 theta1 = [zeros(size(Theta1, 1), 1) Theta1(:, 2:end)];
 theta2 = [zeros(size(Theta2, 1), 1) Theta2(:, 2:end)];
-%Êä³ö²ãÓëÒş²Ø²ãµÄÎó²î¼ÆËã¹«Ê½²»Í¬¡£Êä³ö²ãÎó²îÎª£¨Ô¤²âÖµ-±êÇ©£©£¬
-%Òş²Ø²ãÎó²îÎªÉÏÒ»²ãÎó²î * ÓëÏÂÒ»²ãÈ¨ÖØ .* sigmoidµÄÆ«µ¼Êı£¨sigmoidGradientÖĞµÄÖµÓ¦ÎªÎ´½øĞĞsigmoidÊ±µÄÖµ£©
-d3 = z2 - yNum;                                                    % 5000 * 10   Êä³ö²ãµÄÎó²î
-d2 = (d3 * Theta2(:, 2:end)).*sigmoidGradient(a1 * Theta1');       % 5000 * 25   Òş²Ø²ãµÄÎó²î
+%è¾“å‡ºå±‚ä¸éšè—å±‚çš„è¯¯å·®è®¡ç®—å…¬å¼ä¸åŒã€‚è¾“å‡ºå±‚è¯¯å·®ä¸ºï¼ˆé¢„æµ‹å€¼-æ ‡ç­¾ï¼‰ï¼Œ
+%éšè—å±‚è¯¯å·®ä¸ºä¸Šä¸€å±‚è¯¯å·® * ä¸ä¸‹ä¸€å±‚æƒé‡ .* sigmoidçš„åå¯¼æ•°ï¼ˆsigmoidGradientä¸­çš„å€¼åº”ä¸ºæœªè¿›è¡Œsigmoidæ—¶çš„å€¼ï¼‰
+d3 = a3 - yNum;                                                    % 5000 * 10   è¾“å‡ºå±‚çš„è¯¯å·®
+d2 = (d3 * Theta2(:, 2:end)).*sigmoidGradient(z1 * Theta1');       % 5000 * 25   éšè—å±‚çš„è¯¯å·®
 
-D2 = d3' * a2;                                          %¼ÆËãµÄÊÇTheta2µÄÌİ¶ÈÏÂ½µµÄ·´À¡Îó²î
+D2 = d3' * z2;                                          %è®¡ç®—çš„æ˜¯Theta2çš„æ¢¯åº¦ä¸‹é™çš„åé¦ˆè¯¯å·®
 regularization2 = lambda / m * theta2;
-D1 = d2' * a1;                                          %¼ÆËãµÄÊÇTheta1µÄÌİ¶ÈÏÂ½µµÄ·´À¡Îó²î
+D1 = d2' * z1;                                          %è®¡ç®—çš„æ˜¯Theta1çš„æ¢¯åº¦ä¸‹é™çš„åé¦ˆè¯¯å·®
 regularization1 = lambda / m * theta1;
 Theta1_grad = D1 / m + regularization1;
 Theta2_grad = D2 / m + regularization2;
