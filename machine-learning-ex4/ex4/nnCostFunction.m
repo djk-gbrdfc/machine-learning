@@ -75,7 +75,7 @@ a3 = sigmoid(z2 * Theta2');                             % 5000 * 10
 J = sum(diag(-yNum' * log(a3) - (1.-yNum)' * log(1.-a3))) / m;
 costregularization =  lambda / (2 * m) * (sum(sum(Theta1(:, 2:end).^2)) + sum(sum(Theta2(:, 2:end).^2)));
 J = J + costregularization;
-%diag函数的作用是以向量的形式返回一个矩阵上对角线元素。 ，因为多分类中矩阵相乘会出现多余的值，使用diag函数可以去除这些值
+%diag函数的作用是以向量的形式返回一个矩阵上对角线元素 ，因为多分类中矩阵相乘会出现多余的值，使用diag函数可以去除这些值
 %反向传播
 theta1 = [zeros(size(Theta1, 1), 1) Theta1(:, 2:end)];
 theta2 = [zeros(size(Theta2, 1), 1) Theta2(:, 2:end)];
